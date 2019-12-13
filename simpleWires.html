@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>KeepTalking - Normal wires</title>
+</head>
+
+<body>
+    Wires: <input type="text" id="txtWires"><br>
+    Serial: <input type="text" id="txtSerial"><br>
+    <span id="out"></span>
+
+    <script>
+        var txtWires = document.getElementById("txtWires");
+        var txtSerial = document.getElementById("txtSerial");
+        var out = document.getElementById("out");
+        txtWires.addEventListener("keyup", change)
+
+        function change() {
+            var col = txtWires.value;
+            var lastSerial = parseInt(txtSerial.value.chatAt(txtSerial.value.length))
+            var noSerial = txtSerial.value.length == 0
+            if (col.length == 3) {
+                if ((col.match(/r/gi) || []).length == 0) {
+                    out.innerText = "2. Wire";
+                } else if (col.charAt(2) == "w") {
+                    out.innerText = "3. Wire -> last";
+                } else if ((col.match(/b/gi) || []).length > 1) {
+                    out.innerText = "Last blue wire";
+                } else {
+                    out.innerText = "Last wire";
+                }
+            } else if (col.length == 4) {
+                if (noSerial) {
+
+                }
+                if ((col.match(/r/gi) || []).length > 1 && noSerial) {
+                    out.innerText = "Cut if serial odd";
+                } else if (col.charAt(2) == "w") {
+                    out.innerText = "3. Wire -> last";
+                } else if ((col.match(/b/gi) || []).length > 1) {
+                    out.innerText = "Last blue wire";
+                } else {
+                    out.innerText = "Last wire";
+                }
+            } else if (col.length == 5) {
+
+            } else if (col.length == 6) {
+
+            }
+        }
+    </script>
+</body>
+
+</html>
