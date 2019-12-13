@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep taking - Morse module</title>
+</head>
+
+<body>
+    <input type="text" id="txtCode"><br>
+    <span id="out"></span>
+
+    <script>
+        var txtCode = document.getElementById("txtCode");
+        var out = document.getElementById("out")
+        txtCode.addEventListener("keyup", codeUpdate);
+
+        function codeUpdate(e) {
+            var code = txtCode.value;
+            var letter = "";
+            var word = "";
+            for (var i = 0; i < code.length; i++) {
+                if (code.charAt(i) == " ") {
+                    var letterChar = codeToLetter(letter);
+                    if (letterChar != undefined) {
+                        word += letterChar;
+                    }
+                    letter = "";
+                } else {
+                    letter += code.charAt(i);
+                }
+            }
+            var letterChar = codeToLetter(letter);
+            if (letterChar != undefined) {
+                word += letterChar;
+            }
+            letter = "";
+            out.innerText = "Word: " + word + "\n Frequencies:\n";
+            var matchWord = word;
+            if (code.charAt(code.length - 1) != " ") {
+                matchWord = matchWord.substr(0, matchWord.length - 1)
+            }
+            for (w in freq) {
+                if (w.startsWith(matchWord)) {
+                    out.innerText += "\t" + w + ": " + freq[w] + "\n";
+                }
+            }
+        }
+
+        function codeToLetter(code) {
+            switch (code) {
+                case ".-": return "a";
+                case "-...": return "b";
+                case "-.-.": return "c";
+                case "-..": return "d";
+                case ".": return "e";
+                case "..-.": return "f";
+                case "--.": return "g";
+                case "....": return "h";
+                case "..": return "i";
+                case ".---": return "j";
+                case "-.-": return "k";
+                case ".-..": return "l";
+                case "--": return "m";
+                case "-.": return "n";
+                case "---": return "o";
+                case ".--.": return "p";
+                case "--.-": return "q";
+                case ".-.": return "r";
+                case "...": return "s";
+                case "-": return "t";
+                case "..-": return "u";
+                case "...-": return "v";
+                case ".--": return "w";
+                case "-..-": return "x";
+                case "-.--": return "y";
+                case "--..": return "z";
+                case "-----": return "0";
+                case ".----": return "1";
+                case "..---": return "2";
+                case "...--": return "3";
+                case "....-": return "4";
+                case ".....": return "5";
+                case "-....": return "6";
+                case "--...": return "7";
+                case "---..": return "8";
+                case "----.": return "9";
+            }
+        }
+
+        var freq = {
+            "shell": "3.505MHz",
+            "halls": "3.515MHz",
+            "slick": "3.522MHz",
+            "trick": "3.532MHz",
+            "boxes": "3.535MHz",
+            "leaks": "3.542MHz",
+            "strobe": "3.545MHz",
+            "bistro": "3.552MHz",
+            "flick": "3.555MHz",
+            "bombs": "3.565MHz",
+            "break": "3.572MHz",
+            "brick": "3.575MHz",
+            "steak": "3.582MHz",
+            "sting": "3.592MHz",
+            "vector": "3.595MHz",
+            "beats": "3.600MHz"
+        }
+    </script>
+</body>
+
+</html>
