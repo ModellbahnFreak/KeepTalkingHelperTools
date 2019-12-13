@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Knobs/LED/Needy</title>
+</head>
+
+<body>
+    <input type="text" id="txtLine1"><br>
+    <input type="text" id="txtLine2"><br>
+    <span id="out">
+
+    </span>
+    <script>
+        var txt1 = document.getElementById("txtLine1");
+        var txt2 = document.getElementById("txtLine2");
+        var out = document.getElementById("out");
+        txt1.addEventListener("keyup", change);
+        txt2.addEventListener("keyup", change);
+        change();
+
+        function change() {
+            out.innerText = ""
+            var val1 = txt1.value;
+            var val2 = txt2.value;
+            for (w in states) {
+                if (val1.length >= 6) {
+                    if (w.startsWith(val1 + ";" + val2)) {
+                        out.innerText += w + ": " + states[w] + "\n";
+                    }
+                } else {
+                    if (w.startsWith(val1)) {
+                        out.innerText += w + ": " + states[w] + "\n";
+                    }
+                }
+            }
+        }
+
+        var states = {
+            "001011;111101": "Up",
+            "101010;011011": "Up",
+            "011001;111101": "Down",
+            "101010;010001": "Down",
+            "000010;100111": "Left",
+            "000010;000110": "Left",
+            "101111;111010": "Right",
+            "101100;111010": "Right"
+        }
+
+    </script>
+</body>
+
+</html>
