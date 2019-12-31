@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Maze</title>
+    <script>
+        var mazes = [];
+    </script>
+    <script src="mazes/maze1.js"></script>
+</head>
+<body>
+    All cordinates wit 1,1 in bottom left corner <br>
+    Marker-Positions: <input type="text" id="colMarker"> (two numbers - columns of markers)<br>
+    Start-Position: <input type="text" id="posStart"> (two numbers - x, y of white light)<br>
+    End-Position: <input type="text" id="posEnd"> (two numbers - x, y of the triangle)<br>
+    <span id="out">
+
+    </span>
+
+    <script>
+        var out = document.getElementById("out");
+        var inputs = document.getElementsByTagName("input");
+
+        function init() {
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener("click", update);
+            }
+        }
+
+        function update() {
+
+        }
+
+        init();
+    </script>
+</body>
+</html>
