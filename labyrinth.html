@@ -7,18 +7,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Keep Talking - Maze</title>
     <script>
-        var SET_ORIGIN_11 = false;
+        var SET_ORIGIN_11 = true;
 
         var mazes = [];
     </script>
     <script src="mazes/maze1.js"></script>
+    <script src="mazes/maze2.js"></script>
 </head>
 
 <body>
-    All cordinates wit 1,1 in bottom left corner <br>
+    All cordinates with 1,1 in <b>TOP</b> left corner <br>
     Marker-Positions: <input type="text" id="colMarker"> (two numbers - columns of markers)<br>
-    Start-Position: <input type="text" id="posStart"> (two comma sep. numbers - x,y of white light)<br>
-    End-Position: <input type="text" id="posEnd"> (two comma sep. numbers - x,y of the triangle)<br>
+    Start-Position: <input type="text" id="posStart"> (two numbers - x,y of white light)<br>
+    End-Position: <input type="text" id="posEnd"> (two numbers - x,y of the triangle)<br>
     <button type="button" onclick="update()">Update</button><br><br>
     <span id="out">
 
