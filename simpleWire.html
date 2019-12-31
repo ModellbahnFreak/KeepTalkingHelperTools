@@ -19,7 +19,7 @@
         txt.addEventListener("keyup", change);
 
         function change() {
-            switch (txt.length()) {
+            switch (txt.length) {
                 case 3:
                     if (getTotalRed(txt)==0){
                         out.innerText = "Cut wire 2";
