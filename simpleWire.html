@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Simple Wire</title>
+</head>
+
+<body>
+    <input type="text" id="txt1"><br>
+
+    <span id="out"></span>
+
+    <script>
+        var txt = document.getElementById("txt1");
+        var out = document.getElementById("out");
+        txt.addEventListener("keyup", change);
+
+        function change() {
+            switch (txt.length()) {
+                case 3:
+                    if (getTotalRed(txt)==0){
+                        out.innerText = "Cut wire 2";
+                    }
+                    else if (txt.charAt(2)=='w') {
+                        out.innerText = "Cut wire 3";
+                    }
+                    else if (getTotalBlue(txt)>1) {
+                        if (txt.charAt(2)=='b') {
+                            out.innerText = "Cut wire 3";
+                        }
+                        else {
+                            out.innerText = "Cut wire 2";
+                        }
+                    }
+                    else {
+                        out.innerText = "Cut wire 3";
+                    }
+                    break;
+
+                case 4:
+                    pos = "Cut wire ";
+                    if (getTotalRed(txt)>1){
+                        i = 0;
+                        for (j=0;j<4;j++) {
+                            if (txt.charAt(j)=='r'){
+                                i=j;
+                            }
+                        }
+                        pos = "If last digit is odd: Cut wire " + i + "else cut wire ";
+                    }
+                    if ((txt.charAt(3)=='g' && getTotalRed(txt)==0) || getTotalBlue(txt)==1) {
+                        out.innerText = pos + "1";
+                    }
+                    else if (getTotalYellow(txt)>1) {
+                        out.innerText = pos + "4";
+                    }
+                    else {
+                        out.innerText = pos + "2";
+                    }
+                    break;
+
+                case 5:
+                    pos = "Cut wire ";
+                    if (txt.charAt(4)=='s') {
+                        pos = "If last digit is odd: Cut wire 4 else cut wire ";
+                    }
+                    if (getTotalYellow(txt)>1&&getTotalRed(txt)==1) {
+                        out.innerText = pos + "1";
+                    }
+                    else if (getTotalBlack(txt)==0) {
+                        out.innerText = pos + "2";
+                    }
+                    else {
+                        out.innerText = pos + "1";
+                    }
+                    break;
+
+                case 6:
+                pos = "Cut wire ";
+                    if (getTotalYellow(txt)==0) {
+                        pos = "If last digit is odd: Cut wire 3 else cut wire ";
+                    }
+                    if (getTotalYellow(txt)==1&&getTotalWhite(txt)>1) {
+                        out.innerText = pos + "4"; 
+                    }
+                    else if (getTotalBlack(txt)==0) {
+                        out.innerText = pos + "6";
+                    }
+                    else {
+                        out.innerText = pos + "4";
+                    }
+                    break;
+                
+                default:
+                    out.innerText = "";
+                    break;
+            }
+            
+        }
+
+        function getTotalRed(s) {
+            i = 0;
+            for (j=0; j<s.length();j++){
+                if (s.charAt(j)=='r') {
+                    i++;
+                }
+            }
+            return i;
+        }
+
+        function getTotalBlue(s) {
+            i = 0;
+            for (j=0; j<s.length();j++){
+                if (s.charAt(j)=='b') {
+                    i++;
+                }
+            }
+            return i;
+        }
+
+        function getTotalYellow(s) {
+            i = 0;
+            for (j=0; j<s.length();j++){
+                if (s.charAt(j)=='y') {
+                    i++;
+                }
+            }
+            return i;
+        }
+
+        function getTotalBlack(s) {
+            i = 0;
+            for (j=0; j<s.length();j++){
+                if (s.charAt(j)=='s') {
+                    i++;
+                }
+            }
+            return i;
+        }
+
+        function getTotalWhite(s) {
+            i = 0;
+            for (j=0; j<s.length();j++){
+                if (s.charAt(j)=='w') {
+                    i++;
+                }
+            }
+            return i;
+        }
+    </script>
+</body>
+
+</html>
