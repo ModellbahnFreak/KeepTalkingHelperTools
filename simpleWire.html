@@ -14,11 +14,12 @@
     <span id="out"></span>
 
     <script>
-        var txt = document.getElementById("txt1");
+        var txt1 = document.getElementById("txt1");
         var out = document.getElementById("out");
-        txt.addEventListener("keyup", change);
+        txt1.addEventListener("keyup", change);
 
         function change() {
+            txt = txt1.value;
             switch (txt.length) {
                 case 3:
                     if (getTotalRed(txt)==0){
@@ -49,7 +50,7 @@
                                 i=j;
                             }
                         }
-                        pos = "If last digit is odd: Cut wire " + i + "else cut wire ";
+                        pos = "If last digit is odd: Cut wire " + i + " else cut wire ";
                     }
                     if ((txt.charAt(3)=='g' && getTotalRed(txt)==0) || getTotalBlue(txt)==1) {
                         out.innerText = pos + "1";
@@ -103,7 +104,7 @@
 
         function getTotalRed(s) {
             i = 0;
-            for (j=0; j<s.length();j++){
+            for (j=0; j<s.length;j++){
                 if (s.charAt(j)=='r') {
                     i++;
                 }
@@ -113,7 +114,7 @@
 
         function getTotalBlue(s) {
             i = 0;
-            for (j=0; j<s.length();j++){
+            for (j=0; j<s.length;j++){
                 if (s.charAt(j)=='b') {
                     i++;
                 }
@@ -123,7 +124,7 @@
 
         function getTotalYellow(s) {
             i = 0;
-            for (j=0; j<s.length();j++){
+            for (j=0; j<s.length;j++){
                 if (s.charAt(j)=='y') {
                     i++;
                 }
@@ -133,7 +134,7 @@
 
         function getTotalBlack(s) {
             i = 0;
-            for (j=0; j<s.length();j++){
+            for (j=0; j<s.length;j++){
                 if (s.charAt(j)=='s') {
                     i++;
                 }
@@ -143,7 +144,7 @@
 
         function getTotalWhite(s) {
             i = 0;
-            for (j=0; j<s.length();j++){
+            for (j=0; j<s.length;j++){
                 if (s.charAt(j)=='w') {
                     i++;
                 }
