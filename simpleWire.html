@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    <b>r: red; b: blue; w: white; g: yellow; s: black</b><br>
     <input type="text" id="txt1"><br>
 
     <span id="out"></span>
@@ -125,7 +126,7 @@
         function getTotalYellow(s) {
             i = 0;
             for (j=0; j<s.length;j++){
-                if (s.charAt(j)=='y') {
+                if (s.charAt(j)=='g') {
                     i++;
                 }
             }
