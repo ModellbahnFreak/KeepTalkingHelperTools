@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep talking - Symbol keypads</title>
+    <style>
+        body, button {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 20pt;
+        }
+    </style>
+</head>
+<body>
+    <button id="s1">&#x3d9;</button> <!-- o-Strich -->
+    <button id="s2">&#x466;</button> <!-- A-Strich -->
+    <button id="s3">&#x19b;</button> <!-- Lambda-Strich -->
+    <button id="s4">&#x3de;</button> <!-- Blitz -->
+    <button id="s5">&#x46c;</button> <!-- Dreieck-Bogen -->
+    <button id="s6">&#x3d7;</button> <!-- H-Haken -->
+    <button id="s7">&#x3ff;</button> <!-- C Punkt falschrum -->
+
+    <button id="s8">&#x4ec;</button> <!-- E Punkt falschrum -->
+    <button id="s9">&#x4a8;</button> <!-- C L -->
+    <button id="s10">&#x2606;</button> <!-- Stern leer -->
+    <button id="s11">&#xbf;</button> <!-- Fragezeichen falschrum -->
+
+    <button id="s12">&#xa9;</button> <!-- Copyright -->
+    <button id="s13">&#x47c;</button> <!-- W Dach -->
+    <button id="s14">&#x496;</button> <!-- X Strich -->
+    <button id="s15">&#x506;</button> <!-- C Haken -->
+
+    <button id="s16">&#x431;</button> <!-- roh -->
+    <button id="s17">&#xb6;</button> <!-- Word-Symbol -->
+    <button id="s18">&#x462;</button> <!-- B T -->
+    <button id="s19">&#x67c;</button> <!-- Smiley -->
+
+    <button id="s20">&#x3c8;</button> <!-- Kronleuchter/Kerzen -->
+    <button id="s21">&#x3fe;</button> <!-- C Punkt richtigrum -->
+    <button id="s22">&#x46e;</button> <!-- Epsilon Dach / Haken -->
+    <button id="s23">&#x2605;</button> <!-- Stern ausgefüllt -->
+
+    <button id="s24">&#x482;</button> <!-- Puzzleteil -->
+    <button id="s25">&#xe6;</button> <!-- ae -->
+    <button id="s26">&#x419;</button> <!-- N Dach-->
+    <button id="s27">&#x3a9;</button> <!-- Omega -->
+    <br>
+    <button id="reset">Reset</button>
+    <br><br>
+    <span id="out"></span>
+
+    <script>
+        var columns = [
+            [1,2,3,4,5,6,7],
+            [8,1,7,9,10,6,11],
+            [12,13,9,14,15,3,10],
+            [16,17,18,5,14,11,19],
+            [20,19,18,21,17,22,23],
+            [16,8,24,25,20,26,27]
+        ];
+
+        var out = document.getElementById("out");
+        var btnReset = document.getElementById("reset");
+        var btns = document.getElementsByTagName("button");
+        var pressed = [];
+        function init() {
+            btnReset.addEventListener("click", reset);
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i] != btnReset) {
+                    btns[i].addEventListener("click", pressedSymbol);
+                    btns[i].style.backgroundColor = "initial";
+                    btns[i].setAttribute("sel", "0");
+                    pressed = [];
+                }
+            }
+        }
+
+        function reset() {
+            for (var i = 0; i < btns.length; i++) {
+                if (btns[i] != btnReset) {
+                    btns[i].style.backgroundColor = "initial";
+                    btns[i].setAttribute("sel", "0");
+                    pressed = [];
+                }
+            }
+            out.innerHTML = "";
+        }
+
+        function pressedSymbol(e) {
+            if (e.target.getAttribute("sel") == "1") {
+                e.target.style.backgroundColor = "initial";
+                e.target.setAttribute("sel", "0");
+                pressed.splice(pressed.indexOf(parseInt(e.target.id.substr(1))), 1);
+            } else {
+                e.target.style.backgroundColor = "darkgreen";
+                e.target.setAttribute("sel", "1");
+                pressed.push(parseInt(e.target.id.substr(1)));
+            }
+            var erg = "";
+            columns.forEach(col => {
+                var contained = true;
+                pressed.forEach(p => {
+                    if (!contained || col.indexOf(p) < 0) {
+                        contained = false;
+                    }
+                });
+                if (contained) {
+                    col.forEach(elem => {
+                        if (pressed.indexOf(elem) >= 0) {
+                            erg += btns["s"+elem].innerHTML + " ";
+                        }
+                    });
+                    erg += "<br>";
+                } 
+            });
+            out.innerHTML = erg;
+        }
+
+        function showAll() {
+            var erg = "";
+            columns.forEach(col => {
+                col.forEach(elem => {
+                    erg += btns["s"+elem].innerHTML + " ";
+                });
+                erg += "<br>";
+            });
+            out.innerHTML = erg;
+        }
+
+        init();
+    </script>
+</body>
+</html>

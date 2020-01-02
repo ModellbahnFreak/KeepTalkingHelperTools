@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Maze</title>
+    <script>
+        var SET_ORIGIN_11 = true;
+
+        var mazes = [];
+    </script>
+    <script src="mazes/maze1.js"></script>
+    <script src="mazes/maze2.js"></script>
+    <script src="mazes/maze3.js"></script>
+</head>
+
+<body>
+    All cordinates with 1,1 in <b>TOP</b> left corner <br>
+    Marker-Positions: <input type="text" id="colMarker"> (two numbers - columns of markers)<br>
+    Start-Position: <input type="text" id="posStart"> (two numbers - x,y of white light)<br>
+    End-Position: <input type="text" id="posEnd"> (two numbers - x,y of the triangle)<br>
+    <button type="button" onclick="update()">Update</button><br><br>
+    <span id="out">
+
+    </span>
+
+    <script>
+        var out = document.getElementById("out");
+        var inputs = document.getElementsByTagName("input");
+
+        function init() {
+            for (var i = 0; i < inputs.length; i++) {
+                inputs[i].addEventListener("keyup", update);
+            }
+        }
+
+        function update() {
+            var marker = inputs["colMarker"].value.replace(/[^0-6]/g, "");
+            var start = inputs["posStart"].value.replace(/[^0-6,]/g, "");
+            var end = inputs["posEnd"].value.replace(/[^0-6,]/g, "");
+            if (SET_ORIGIN_11) {
+                marker = changeToZeroOrigin(marker);
+                start = changeToZeroOrigin(start);
+                end = changeToZeroOrigin(end);
+            }
+            if (start.indexOf(",") < 0) {
+                start = start.substr(0, 1) + "," + start.substr(1);
+            }
+            if (end.indexOf(",") < 0) {
+                end = end.substr(0, 1) + "," + end.substr(1);
+            }
+            var startSplit = start.split(",");
+            var endSplit = end.split(",");
+            var lab = mazes[marker];
+            if (lab != undefined) {
+                out.innerText = "";
+                var startX = parseInt(startSplit[0]), startY = parseInt(startSplit[1]);
+                var endX = parseInt(endSplit[0]), endY = parseInt(endSplit[1]);
+                if (!isNaN(startX) && !isNaN(startY) && !isNaN(endX) && !isNaN(endY)) {
+                    var process = [{ "pos": lab[start], "history": [] }];
+                    var processNext = [];
+                    var visited = [];
+                    var finalPath = undefined;
+                    while (process.length > 0 && finalPath == undefined) {
+                        process.forEach(field => {
+                            field.pos.forEach(next => {
+                                if (finalPath == undefined) {
+                                    var commaPos = next.lastIndexOf(",");
+                                    var nextPos = next.substr(0, commaPos);
+                                    var nextDir = next.substr(commaPos + 1);
+                                    if (visited.indexOf(nextPos) < 0) {
+                                        visited.push(nextPos);
+                                        var nextObj = { "pos": lab[nextPos], "history": field.history.concat(nextDir) };
+                                        if (nextPos == end) {
+                                            finalPath = nextObj;
+                                        }
+                                        processNext.push(nextObj);
+                                    }
+                                }
+                            });
+                        });
+                        process = processNext;
+                        processNext = [];
+                    }
+                    console.log(finalPath);
+                    if (finalPath != undefined) {
+                        writePath(finalPath);
+                    }
+                }
+                drawMaze(marker, startX, startY, endX, endY);
+            } else {
+                out.innerText = "Unknown marker pos";
+            }
+        }
+
+        function writePath(movement) {
+            var history = movement.history;
+            var erg = "";
+            for (var i = 0; i < history.length; i++) {
+                var elem = history[i];
+                var count = 1;
+                while(history[i+1] == elem) {
+                    count++;
+                    i++;
+                }
+                erg += count + "x " + elem + "\n";
+            }
+            out.innerText += erg;
+        }
+
+        function drawMaze(num = "16", startX = -1, startY = -1, endX = -1, endY = -1) {
+            var lab = mazes[num];
+            var table = document.createElement("table");
+            var tbody = document.createElement("tbody");
+            table.appendChild(tbody);
+            for (var y = 0; y < 6; y++) {
+                var row = document.createElement("tr");
+                tbody.appendChild(row);
+                for (var x = 0; x < 6; x++) {
+                    var cell = document.createElement("td");
+                    row.appendChild(cell);
+                    if (x == startX && y == startY) {
+                        cell.innerText = "S";
+                    } else if (x == endX && y == endY) {
+                        cell.innerText = "E";
+                    } else {
+                        cell.innerText = "o";
+                    }
+                    cell.style.borderTop = "2px solid black";
+                    cell.style.borderBottom = "2px solid black";
+                    cell.style.borderLeft = "2px solid black";
+                    cell.style.borderRight = "2px solid black";
+                    cell.style.margin = 0;
+                    var free = lab[x + "," + y];
+                    free.forEach(dir => {
+                        if (dir.split(",")[2] == "up") {
+                            cell.style.borderTop = "none";
+                        } else if (dir.split(",")[2] == "down") {
+                            cell.style.borderBottom = "none";
+                        } else if (dir.split(",")[2] == "left") {
+                            cell.style.borderLeft = "none";
+                        } else if (dir.split(",")[2] == "right") {
+                            cell.style.borderRight = "none";
+                        }
+                    });
+                }
+            }
+            out.appendChild(table);
+        }
+
+        function changeToZeroOrigin(text) {
+            var erg = text.replace(/1/g, "0").replace(/2/g, "1").replace(/3/g, "2");
+            erg = erg.replace(/4/g, "3").replace(/5/g, "4").replace(/6/g, "5");
+            return erg;
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
