@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Memory</title>
+</head>
+
+<body>
+    <b>Write the big number in the left textbox. Position 1 is left.</b><br>
+    <input type="text" id="txt1"> <span id="pos1"></span> <input type="text" id="value1"><br>
+    <input type="text" id="txt2"> <span id="pos2"></span> <input type="text" id="value2"><br>
+    <input type="text" id="txt3"> <span id="pos3"></span> <input type="text" id="value3"><br>
+    <input type="text" id="txt4"> <span id="pos4"></span> <input type="text" id="value4"><br>
+    <input type="text" id="txt5"> <span id="out"></span><br>
+    <button id="reset">Reset</button><br>
+
+    <script>
+        var txt1 = document.getElementById("txt1");
+        var txt2 = document.getElementById("txt2");
+        var txt3 = document.getElementById("txt3");
+        var txt4 = document.getElementById("txt4");
+        var txt5 = document.getElementById("txt5");
+        var val1 = document.getElementById("value1");
+        var val2 = document.getElementById("value2");
+        var val3 = document.getElementById("value3");
+        var val4 = document.getElementById("value4");
+        var out  = document.getElementById("out");
+        var pos1 = document.getElementById("pos1");
+        var pos2 = document.getElementById("pos2");
+        var pos3 = document.getElementById("pos3");
+        var pos4 = document.getElementById("pos4");
+        var btnReset = document.getElementById("reset");
+        txt1.addEventListener("keyup", change);
+        txt2.addEventListener("keyup", change);
+        txt3.addEventListener("keyup", change);
+        txt4.addEventListener("keyup", change);
+        txt5.addEventListener("keyup", change);
+        val1.addEventListener("keyup", change);
+        val2.addEventListener("keyup", change);
+        val3.addEventListener("keyup", change);
+        val4.addEventListener("keyup", change);
+        btnReset.addEventListener("click", reset);
+        positions = ["not given","not given","not given","not given"];
+        labels = ["not given","not given","not given","not given"];
+        input = [txt1,txt2,txt3,txt4,txt5,val1,val2,val3,val4];
+
+        function change() {
+            if (getNumber(txt1) > 0 && getNumber(txt1) < 5) {
+                switch (getNumber(txt1)) {
+                    case 1: pos1.innerText = "Position 2, enter the number";
+                        positions[0] = 2;
+                        labels[0] = val1.value;
+                        break;
+                    case 2: pos1.innerText = "Position 2, enter the number";
+                        positions[0] = 2;
+                        labels[0] = val1.value;
+                        break;
+                    case 3: pos1.innerText = "Position 3, enter the number";
+                        positions[0] = 3;
+                        labels[0] = val1.value;
+                        break;
+                    case 4: pos1.innerText = "Position 4, enter the number";
+                        positions[0] = 4;
+                        labels[0] = val1.value;
+                        break;
+                }
+            } else {
+                pos1.innerText = "";
+                positions[0] = "not given";
+                labels[0] = "not given";
+            }
+
+            if (getNumber(txt2) > 0 && getNumber(txt2) < 5) {
+                switch (getNumber(txt2)) {
+                    case 1: pos2.innerText = "Label 4, enter the position";
+                        positions[1] = val2.value;
+                        labels[1] = 4;
+                        break;
+                    case 2: pos2.innerText = "Position " + positions[0] + ", enter the number";
+                        positions[1] = positions[0];
+                        labels[1] = val2.value;
+                        break;
+                    case 3: pos2.innerText = "Position 1, enter the number"
+                        positions[1] = 1;
+                        labels[1] = val2.value;
+                        break;
+                    case 4: pos2.innerText = "Position " + positions[0] + ", enter the number";
+                        positions[1] = positions[0];
+                        labels[1] = val2.value;
+                        break;
+                }
+            }
+            else {
+                pos2.innerText = "";
+                positions[1] = "not given";
+                labels[1] = "not given"
+            }
+            
+            if (getNumber(txt3) > 0 && getNumber(txt3) < 5) {
+                switch (getNumber(txt3)) {
+                    case 1: pos3.innerText = "Label " + labels[1] + ", enter the postition";
+                        positions[2] = val3.value;
+                        labels[2] = labels[1];
+                        break;
+                    case 2: pos3.innerText = "Label " + labels[0] + ", enter the postition";
+                        positions[2] = val3.value;
+                        labels[2] = labels[0];
+                        break;
+                    case 3: pos3.innerText = "Position 3, enter the number";
+                        positions[2] = 3;
+                        labels[2] = val3.value;
+                        break;
+                    case 4: pos3.innerText = "Label 4, enter the postition";
+                        positions[2] = val3.value;
+                        labels[2] = 4;
+                        break;
+                }
+            }
+            else {
+                pos3.innerText = "";
+                positions[2] = "not given";
+                labels[2] = "not given";
+            }
+
+            if (getNumber(txt4) > 0 && getNumber(txt4) < 5) {
+                switch (getNumber(txt4)) {
+                    case 1: pos4.innerText = "Position " + positions[0] + ", enter the number";
+                        positions[3] = positions[0];
+                        labels[3] = val4.value;
+                        break;
+                    case 2: pos4.innerText = "Position 1, enter the number";
+                        positions[3] = 1;
+                        labels[3] = val4.value;
+                        break;
+                    case 3: pos4.innerText = "Position " + positions[1] + ", enter the number";
+                        positions[3] = positions[1];
+                        labels[3] = val4.value;
+                        break;
+                    case 4: pos4.innerText = "Position " + positions[1] + ", enter the number";
+                        positions[3] = positions[1];
+                        labels[3] = val4.value;
+                        break;
+                }
+            }
+            else {
+                pos4.innerText = "";
+                positions[3] = "not given";
+                labels[3] = "not given";
+            }
+
+            if (getNumber(txt5) > 0 && getNumber(txt5) < 5) {
+                switch (getNumber(txt5)) {
+                    case 1: out.innerText = "Label " + labels[0];
+                        break;
+                    case 2: out.innerText = "Label " + labels[1];
+                        break;
+                    case 3: out.innerText = "Label " + labels[3];
+                        break;
+                    case 4: out.innerText = "Label " + labels[2];
+                        break;
+                }
+            }
+            else {
+                out.innerText = "";
+            }
+        }
+
+        function isInt(s) {
+            return (Number.parseInt(s.value)>0||Number.parseInt(s.value)<=0);
+        }
+
+        function getNumber(s) {
+            return Number.parseInt(s.value);
+        }
+
+        function reset() {
+            input.forEach(element => {
+                element.value = "";
+            });
+            change();
+        }
+        
+    </script>
+</body>
+
+</html>
