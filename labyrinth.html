@@ -7,17 +7,26 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Keep Talking - Maze</title>
     <script>
-        var SET_ORIGIN_11 = true;
+        var SET_ORIGIN_11 = false;
+        var SET_ORIGIN_BOTTOM_RIGHT = false;
 
         var mazes = [];
     </script>
     <script src="mazes/maze1.js"></script>
     <script src="mazes/maze2.js"></script>
     <script src="mazes/maze3.js"></script>
+    <style>
+        .link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+            border: 1px solid black;
+        }
+    </style>
 </head>
 
 <body>
-    All cordinates with 1,1 in <b>TOP</b> left corner <br>
+    All cordinates with <span class="link" onclick="switchOrigin();" id="originSw">1,1</span> in <span class="link" onclick="switchYDir();" id="yDirSw">bottom</span> left corner <br><br>
     Marker-Positions: <input type="text" id="colMarker"> (two numbers - columns of markers)<br>
     Start-Position: <input type="text" id="posStart"> (two numbers - x,y of white light)<br>
     End-Position: <input type="text" id="posEnd"> (two numbers - x,y of the triangle)<br>
@@ -29,6 +38,8 @@
     <script>
         var out = document.getElementById("out");
         var inputs = document.getElementsByTagName("input");
+        var originSw = document.getElementById("originSw");
+        var yDirSw = document.getElementById("yDirSw");
 
         function init() {
             for (var i = 0; i < inputs.length; i++) {
@@ -50,6 +61,10 @@
             }
             if (end.indexOf(",") < 0) {
                 end = end.substr(0, 1) + "," + end.substr(1);
+            }
+            if (SET_ORIGIN_BOTTOM_RIGHT) {
+                start = changeToBottom(start);
+                end = changeToBottom(end);
             }
             var startSplit = start.split(",");
             var endSplit = end.split(",");
@@ -101,7 +116,7 @@
             for (var i = 0; i < history.length; i++) {
                 var elem = history[i];
                 var count = 1;
-                while(history[i+1] == elem) {
+                while (history[i + 1] == elem) {
                     count++;
                     i++;
                 }
@@ -154,6 +169,57 @@
             var erg = text.replace(/1/g, "0").replace(/2/g, "1").replace(/3/g, "2");
             erg = erg.replace(/4/g, "3").replace(/5/g, "4").replace(/6/g, "5");
             return erg;
+        }
+
+        function changeToBottom(text) {
+            var commaPos = text.indexOf(",") + 1;
+            var erg = text.substr(0, commaPos);
+            var yPart = text.substr(commaPos);
+            for (var i = 0; i < yPart.length; i++) {
+                switch (yPart.charAt(i)) {
+                    case "5":
+                        erg += "0";
+                        break;
+                    case "4":
+                        erg += "1";
+                        break;
+                    case "3":
+                        erg += "2";
+                        break;
+                    case "2":
+                        erg += "3";
+                        break;
+                    case "1":
+                        erg += "4";
+                        break;
+                    case "0":
+                        erg += "5";
+                        break;
+                    default:
+                        erg += yPart.charAt(i);
+                }
+            }
+            return erg;
+        }
+
+        function switchOrigin() {
+            SET_ORIGIN_11 = !SET_ORIGIN_11;
+            if (SET_ORIGIN_11) {
+                originSw.innerText = "1,1";
+            } else {
+                originSw.innerText = "0,0";
+            }
+            update();
+        }
+
+        function switchYDir() {
+            SET_ORIGIN_BOTTOM_RIGHT = !SET_ORIGIN_BOTTOM_RIGHT;
+            if (SET_ORIGIN_BOTTOM_RIGHT) {
+                yDirSw.innerText = "bottom";
+            } else {
+                yDirSw.innerText = "top";
+            }
+            update();
         }
 
         init();

@@ -6,52 +6,175 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>KeepTalking - Normal wires</title>
+    <style>
+        select {
+            width: 75px;
+            overflow: hidden;
+        }
+
+        .red {
+            color: red;
+        }
+
+        .white {
+            color: white;
+            background-color: black;
+        }
+
+        .blue {
+            color: blue;
+        }
+
+        .yellow {
+            color: yellow;
+            background-color: black;
+        }
+
+        .black {
+            color: black;
+        }
+
+        .other {
+            color: black;
+        }
+
+        .none {
+            color: black;
+        }
+    </style>
 </head>
 
 <body>
-    Wires: <input type="text" id="txtWires"><br>
-    Serial: <input type="text" id="txtSerial"><br>
+    <!--Colors: red, white, blue, yellow, black, else-->
+    <table>
+        <tbody>
+            <tr id="wires">
+            </tr>
+        </tbody>
+    </table>
+    <br>
+    Serial: <input type="number" id="numSerial"><br>
     <span id="out"></span>
+    <br>
 
     <script>
-        var txtWires = document.getElementById("txtWires");
-        var txtSerial = document.getElementById("txtSerial");
+        var numSerial = document.getElementById("numSerial");
         var out = document.getElementById("out");
-        txtWires.addEventListener("keyup", change)
+        var wireBox = document.getElementById("wires");
+        var gui = null;
+        var numWiresMax = 6;
 
-        function change() {
-            var col = txtWires.value;
-            var lastSerial = parseInt(txtSerial.value.chatAt(txtSerial.value.length))
-            var noSerial = txtSerial.value.length == 0
-            if (col.length == 3) {
-                if ((col.match(/r/gi) || []).length == 0) {
-                    out.innerText = "2. Wire";
-                } else if (col.charAt(2) == "w") {
-                    out.innerText = "3. Wire -> last";
-                } else if ((col.match(/b/gi) || []).length > 1) {
-                    out.innerText = "Last blue wire";
-                } else {
-                    out.innerText = "Last wire";
-                }
-            } else if (col.length == 4) {
-                if (noSerial) {
+        function init() {
+            for (var i = 0; i < numWiresMax; i++) {
+                var select = '<td id="cell' + i + '">Wire ' + (i + 1) + ':<br><select id="wire' + i + '" size="8">' +
+                    '<option value="red" class="red">Red</option>' +
+                    '<option value="white" class="white">White</option>' +
+                    '<option value="blue" class="blue">Blue</option>' +
+                    '<option value="yellow" class="yellow">Yellow</option>' +
+                    '<option value="black" class="black">Black</option>' +
+                    '<option value="other" class="other">Other</option>' +
+                    '<option selected value="none" class="none">None</option></select></td>';
+                wireBox.innerHTML += select;
+            }
 
-                }
-                if ((col.match(/r/gi) || []).length > 1 && noSerial) {
-                    out.innerText = "Cut if serial odd";
-                } else if (col.charAt(2) == "w") {
-                    out.innerText = "3. Wire -> last";
-                } else if ((col.match(/b/gi) || []).length > 1) {
-                    out.innerText = "Last blue wire";
-                } else {
-                    out.innerText = "Last wire";
-                }
-            } else if (col.length == 5) {
-
-            } else if (col.length == 6) {
-
+            numSerial.addEventListener("keyup", change);
+            gui = document.getElementsByTagName("*");
+            for (var i = 0; i < numWiresMax; i++) {
+                gui["wire" + i].addEventListener("click", change);
             }
         }
+
+        function change() {
+            resetAllBackColors()
+            var colors = [];
+            for (var i = 0; i < numWiresMax; i++) {
+                if (gui["wire" + i].value != "none") {
+                    colors[i] = gui["wire" + i].value;
+                }
+            }
+
+            var serialNumber = parseInt(numSerial.value);
+
+            if (colors.length == 3) {
+                if (countInArray(colors, "red") == 0) {
+                    out.innerText = "Cut 2. Wire";
+                    gui["cell1"].style.background = "red";
+                } else if (colors[2] == "white") {
+                    out.innerText = "Cut 3. Wire -> last";
+                    gui["cell2"].style.background = "red";
+                } else if (countInArray(colors, "blue") > 1) {
+                    out.innerText = "Cut Last blue wire";
+                    gui["cell" + gui.lastIndexOf("blue")].style.background = "red";
+                } else {
+                    out.innerText = "Cut last wire";
+                    gui["cell" + numWiresMax].style.background = "red";
+                }
+            } else if (colors.length == 4) {
+                if (countInArray(colors, "red") > 1 && (serialNumber % 2) != 0) {
+                    out.innerText = "Cut last red wire";
+                    gui["cell" + gui.lastIndexOf("blue")].style.background = "red";
+                } else if (colors[3] == "yellow" && countInArray(colors, "red") == 0) {
+                    out.innerText = "Cut 1. wire";
+                    gui["cell0"].style.background = "red";
+                } else if (countInArray(colors, "blue") == 1) {
+                    out.innerText = "Cut 1. wire";
+                    gui["cell0"].style.background = "red";
+                } else if (countInArray(colors, "yellow") > 1) {
+                    out.innerText = "Cut Last wire";
+                    gui["cell3"].style.background = "red";
+                } else {
+                    out.innerText = "Cut 2. wire";
+                    gui["cell1"].style.background = "red";
+                }
+            } else if (colors.length == 5) {
+                if (colors[4] == "black" && (serialNumber % 2) != 0) {
+                    out.innerText = "Cut 4. wire";
+                    gui["cell3"].style.background = "red";
+                } else if (countInArray(colors, "red") == 1 && countInArray(colors, "yellow") > 1) {
+                    out.innerText = "Cut 1. wire";
+                    gui["cell0"].style.background = "red";
+                } else if (countInArray(colors, "black") == 0) {
+                    out.innerText = "Cut 2. wire";
+                    gui["cell1"].style.background = "red";
+                } else {
+                    out.innerText = "Cut 1. wire";
+                    gui["cell0"].style.background = "red";
+                }
+            } else if (colors.length == 6) {
+                if (countInArray(colors, "yellow") == 0 && (serialNumber % 2) != 0) {
+                    out.innerText = "Cut 3. wire";
+                    gui["cell2"].style.background = "red";
+                } else if (countInArray(colors, "yellow") == 1 && countInArray(colors, "white") > 1) {
+                    out.innerText = "Cut 4. wire";
+                    gui["cell3"].style.background = "red";
+                } else if (countInArray(colors, "red") == 0) {
+                    out.innerText = "Cut last wire";
+                    gui["cell5"].style.background = "red";
+                } else {
+                    out.innerText = "Cut 4. wire";
+                    gui["cell3"].style.background = "red";
+                }
+            }
+        }
+
+        function countInArray(arr, element) {
+            var numOccurence = 0;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == element) {
+                    i++
+                }
+            }
+            return numOccurence;
+        }
+
+        function resetAllBackColors() {
+            for (var i = 0; i < numWiresMax; i++) {
+                gui["cell" + i].style.background = "";
+            }
+
+        }
+
+        init();
     </script>
 </body>
 
