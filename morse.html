@@ -22,14 +22,19 @@
             var letter = "";
             var word = "";
             for (var i = 0; i < code.length; i++) {
-                if (code.charAt(i) == " ") {
-                    var letterChar = codeToLetter(letter);
-                    if (letterChar != undefined) {
-                        word += letterChar;
-                    }
-                    letter = "";
+                var c = code.charAt(i);
+                if (c != "." && c != "-" && c != " ") {
+                    word += c;
                 } else {
-                    letter += code.charAt(i);
+                    if (c == " ") {
+                        var letterChar = codeToLetter(letter);
+                        if (letterChar != undefined) {
+                            word += letterChar;
+                        }
+                        letter = "";
+                    } else {
+                        letter += c;
+                    }
                 }
             }
             var letterChar = codeToLetter(letter);
@@ -39,11 +44,25 @@
             letter = "";
             out.innerText = "Word: " + word + "\n Frequencies:\n";
             var matchWord = word;
-            if (code.charAt(code.length - 1) != " ") {
+            var lastChar = code.charAt(code.length - 1);
+            if (lastChar == "." || lastChar == "-") {
                 matchWord = matchWord.substr(0, matchWord.length - 1)
             }
             for (w in freq) {
-                if (w.startsWith(matchWord)) {
+                var wordPos = -2;
+                for (var i = 0; i < matchWord.length && wordPos != -1; i++) {
+                    var nextPos = w.indexOf(matchWord.charAt(i));
+                    if (wordPos == -2) {
+                        wordPos = nextPos;
+                    } else {
+                        if (nextPos == ((wordPos + 1) % w.length)) {
+                            wordPos = nextPos;
+                        } else {
+                            wordPos = -1;
+                        }
+                    }
+                }
+                if (wordPos >= 0) {
                     out.innerText += "\t" + w + ": " + freq[w] + "\n";
                 }
             }
