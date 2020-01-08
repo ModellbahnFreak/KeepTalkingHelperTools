@@ -76,7 +76,7 @@
                 out.innerText = "";
                 var startX = parseInt(startSplit[0]), startY = parseInt(startSplit[1]);
                 var endX = parseInt(endSplit[0]), endY = parseInt(endSplit[1]);
-                if (!isNaN(startX) && !isNaN(startY) && !isNaN(endX) && !isNaN(endY)) {
+                if (!isNaN(startX) && !isNaN(startY) && !isNaN(endX) && !isNaN(endY) && isInMaze(startX, startY) && isInMaze(endX, endY)) {
                     var process = [{ "pos": lab[start], "history": [] }];
                     var processNext = [];
                     var visited = [];
@@ -223,6 +223,10 @@
                 yDirSw.innerText = "top";
             }
             update();
+        }
+
+        function isInMaze(x, y) {
+            return x >= 0 && x <= 5 && y >= 0 && y <= 5;
         }
 
         init();
