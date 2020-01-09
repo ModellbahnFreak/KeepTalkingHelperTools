@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Who's on first</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        tbody {
+            border: 1px solid black;
+        }
+
+        td {
+            border: 1px solid black;
+            width: 20px;
+            height: 20px;
+            font-size: 10pt;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    Step 1: <input type="text" id="txtDisplay"><br>
+    Step 2: <input type="text" id="txtButton"><br>
+    <span id="out"></span>
+
+    <script>
+        var txtDisp = document.getElementById("txtDisplay");
+        var txtBtn = document.getElementById("txtButton");
+        var out = document.getElementById("out");
+        function init() {
+            txtDisp.addEventListener("keyup", update);
+            txtBtn.addEventListener("keyup", update);
+            update();
+        }
+
+        function update() {
+            var erg = "";
+            erg += "<h3>Step 1</h3>" + update1() + "<br>";
+            erg += "<h3>Step 2</h3>" + update2();
+            out.innerHTML = erg;
+        }
+
+        function update1() {
+            var tab = "<table><tbody><tr><th colspan = '2'>" + txtDisp.value + "</th></tr>";
+            var parts = step1[txtDisp.value.trim().toLowerCase()]
+            if (parts != undefined) {
+                parts = parts.split("");
+                var erg = replacementX[parts[0]] + " " + replacementY[parts[1]];
+                for (var i = 0; i < parts.length; i++) {
+                    parts[i] = parseInt(parts[i]);
+                }
+                for (var y = 0; y < 3; y++) {
+                    tab += "<tr>"
+                    for (var x = 0; x < 2; x++) {
+                        if (parts[0] == x && parts[1] == y) {
+                            tab += "<td>X</td>";
+                        } else {
+                            tab += "<td></td>";
+                        }
+                    }
+                    tab += "</tr>"
+                }
+                tab += "</tbody></table>"
+                return erg + tab;
+            } else {
+                return "";
+            }
+        }
+
+        function update2() {
+            return step2[txtBtn.value.trim().toLowerCase()];
+        }
+
+        var step1 = {
+            "yes": "01",
+            "first": "10",
+            "display": "12",
+            "okay": "10",
+            "says": "12",
+            "nothing": "01",
+            "": "02",
+            "blank": "11",
+            "no": "12",
+            "led": "01",
+            "lead": "12",
+            "read": "11",
+            "red": "11",
+            "reed": "02",
+            "leed": "02",
+            "hold on": "12",
+            "you": "11",
+            "you are": "12",
+            "your": "11",
+            "you're": "11",
+            "youre": "11",
+            "ur": "00",
+            "there": "12",
+            "they're": "02",
+            "theyre": "02",
+            "their": "11",
+            "they are": "01",
+            "see": "12",
+            "c": "10",
+            "cee": "12",
+        };
+
+        var replacementX = {
+            0: "left",
+            1: "right"
+        };
+        var replacementY = {
+            0: "top",
+            1: "middle",
+            2: "bottom"
+        };
+
+        var step2 = {
+            "ready": "yes, okay, what, middle, left, press, right, blank, ready",
+            "first": "left, okay, yes, middle, no, right, nothing, uhhh, wait, blank, what, press, first",
+            "no": "blank, uhhh, wait, first, what, ready, right, yes, nothing, left, press, okay, no",
+            "blank": "wait, right, okay, middle, blank",
+            "nothing": "uhhh, right, okay, middle, yes, blank, no, press, left, what, wait, first, nothing",
+            "yes": "okay, right, uhhh, middle, first, what, press, ready, nothing, yes",
+            "what": "uhhh, what",
+            "left": "right, left",
+            "right": "yes, nothing, ready, press, no, wait, what, right",
+            "middle": "blank, ready, okay, what, nothing, press, no, wait, left, middle",
+            "okay": "middle, no, first, yes, uhhh, nothing, wait, okay",
+            "wait": "uhhh, no, blank, okay, yes, left, first, press, what",
+            "press": "right, middle, yes, ready, press",
+            "you": "sure, you are, your, you're, next, uh huh, ur, hold, what?, you",
+            "you are": "your, next, like, uh huh, what?, done, uh uh, hold, you, u, you're, sure, ur, you are",
+            "your": "uh uh, you are, uh huh, your",
+            "you're": "you, you're",
+            "youre": "you, you're",
+            "ur": "done, u, ur",
+            "u": "uh huh, sure, next, what?, you're, ur, uh uh, done, u",
+            "uh huh": "uh huh",
+            "uhhuh": "uh huh",
+            "uh uh": "ur, u, you are, you're, next, uh uh",
+            "uhuh": "ur, u, you are, you're, next, uh uh",
+            "what?": "you, hold, you're, your, u, done, uh uh, like, you are, uh huh, ur, next, what?",
+            "done": "sure, uh huh, next, what?, your, ur, you're, hold, like, you, u, you are, uh uh, done",
+            "next": "what?, uh huh, uh uh, your, hold, sure, next",
+            "hold": "you are, u, done, uh uh, you, ur, sure, what?, you're, next, hold",
+            "sure": "you are, done, like, you're, you, hold, uh huh, ur, sure",
+            "like": "you're, next, u, ur, hold, done, uh uh, what?, uh huh, you, like"
+        };
+
+        init();
+    </script>
+</body>
+
+</html>
