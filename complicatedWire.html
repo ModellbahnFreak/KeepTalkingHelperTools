@@ -11,15 +11,26 @@
 <body>
     <span id="input">
 
+
     </span>
+
+    <button id="newLayers">Add 6 new layers</button><br>
+    <button id="reset">RESET</button>
 
     <script>
         var input = document.getElementById("input");
         var gui = null;
+        var layers = 6;
+        var btnReset = document.getElementById("reset");
+        btnReset.addEventListener("click", reset);
+        var newLayers = document.getElementById("newLayers");
+        newLayers.addEventListener("click", addNewLayers);
         init();
 
         function init() {
-            for (var i = 0; i < 6; i++) {
+            input.innerHTML = "";
+            gui = null;
+            for (var i = 0; i < layers; i++) {
                 var tags = 'Wire ' + (i + 1) + ': <input i="' + i + '" type="checkbox" id="star' + i + '"><label for="star' + i + '">Star</label>' +
                     '<input type="checkbox" i="' + i + '" id="led' + i + '"><label for="led' + i + '">LED</label>' +
                     '<input type="checkbox" i="' + i + '" id="red' + i + '"><label for="red' + i + '" style="color:red;">Red</label>' +
@@ -31,17 +42,22 @@
 
             gui = document.getElementsByTagName("*");
 
-            for (var i = 0; i < 6; i++) {
+            for (var i = 0; i < layers; i++) {
                 gui["star" + i].addEventListener("click", change);
                 gui["led" + i].addEventListener("click", change);
                 gui["red" + i].addEventListener("click", change);
                 gui["blue" + i].addEventListener("click", change);
                 change({ target: gui["star" + i] });
             }
-        }
 
+        }
+                    
         function change(e) {
             var i = e.target.getAttribute("i");
+            setInstruction(i);
+        }
+
+        function setInstruction(i){
             var star = gui["star" + i];
             var led = gui["led" + i];
             var red = gui["red" + i];
@@ -136,6 +152,39 @@
 
         function hasBatteries() {
             return "Cut if two or more batteries";
+        }
+
+        function addNewLayers() {
+            var arr = getCurrentState();
+            var oldLayers = layers;
+            layers+=6;
+            console.log(arr);
+            init();
+            setOldState(oldLayers,arr);
+        }
+
+        function getCurrentState() {
+            var arr = [];
+            for (i=0; i<layers;i++) {
+                arr.push([gui["star"+i].checked, gui["led"+i].checked, gui["blue"+i].checked, gui["red"+i].checked]);
+            }
+            return arr;
+        }
+
+        function setOldState(oldLayers,arr) {
+            for (i=0; i<oldLayers;i++) {
+                j=i;
+                gui["star"+j].checked=arr[i][0];
+                gui["led"+j].checked =arr[i][1];
+                gui["blue"+j].checked=arr[i][2];
+                gui["red"+j].checked =arr[i][3];
+                setInstruction(i);
+            }
+        }
+
+        function reset() {
+            layers=6;
+            init();
         }
     </script>
 </body>
