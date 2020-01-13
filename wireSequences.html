@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Wire Sequences - Keep Talking</title>
+    <style>
+        .red {
+            background-color: red;
+            color: black;
+        }
+        .blue {
+            background-color: blue;
+            color: white;
+        }
+        .black {
+            background-color: black;
+            color: white;
+        }
+        button {
+            width: 30px;
+            height: 30px;
+        }
+        #btnReset {
+            width: 100px;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <button id="btnReset">RESET</button>
+    <table>
+        <tbody>
+            <tr><td><button id="rA" class="red" letter="A">A</button><button id="rB" class="red" letter="B">B</button><button id="rC" class="red" letter="C">C</button></td></tr>
+            <tr><td><button id="bA" class="blue" letter="A">A</button><button id="bB" class="blue" letter="B">B</button><button id="bC" class="blue" letter="C">C</button></td></tr>
+            <tr><td><button id="sA" class="black" letter="A">A</button><button id="sB" class="black" letter="B">B</button><button id="sC" class="black" letter="C">C</button></td></tr>
+        </tbody>
+    </table>
+
+    <span id = "out"></span>
+    <span id = "warning"></span>
+
+    <script>
+        var out = document.getElementById("out");
+        var btnsRed = document.getElementsByClassName("red");
+        var btnsBlue = document.getElementsByClassName("blue");
+        var btnsBlack = document.getElementsByClassName("black");
+        var numbRed = 0, numbBlue = 0, numbBlack = 0;
+        var warning = document.getElementById("warning");
+
+        function init() {
+            for (var i = 0; i<3; i++) {
+                btnsRed[i].addEventListener("click", buttonRed);
+                btnsBlue[i].addEventListener("click", buttonBlue);
+                btnsBlack[i].addEventListener("click", buttonBlack);
+            }
+            btnReset.addEventListener("click", reset);
+        }
+
+        function buttonRed(arg) {
+            var letter = arg.target.getAttribute("letter");
+            if (numbRed>8) {
+                warning.innerText += "No more red cables\r\n";
+            } else {
+                if (red[numbRed].indexOf(letter)>=0) {
+                    out.innerText += "CUT\r\n";
+                } else {
+                    out.innerText += "Don't cut\r\n";
+                }
+                numbRed++;
+            }
+            
+        }
+
+        function buttonBlue(arg) {
+            var letter = arg.target.getAttribute("letter");
+            if (numbBlue>8) {
+                warning.innerText += "No more blue cables!\r\n";
+            } else {
+                if (blue[numbBlue].indexOf(letter)>=0) {
+                    out.innerText += "CUT\r\n";
+                } else {
+                    out.innerText += "Don't cut\r\n";
+                }
+                numbBlue++;
+            }
+        }
+
+        function buttonBlack(arg) {
+            var letter = arg.target.getAttribute("letter");
+            if (numbBlack>8) {
+                warning.innerText += "No more black cables!\r\n";
+            } else {
+                if (black[numbBlack].indexOf(letter)>=0) {
+                    out.innerText += "CUT\r\n";
+                } else {
+                    out.innerText += "Don't cut\r\n";
+                }
+                numbBlack++;
+            }
+        }
+
+        function reset() {
+            out.innerText = "";
+            warning.innerText = "";
+            numbRed = 0;
+            numbBlue = 0;
+            numbBlack = 0;
+        }
+
+        var red = [
+            ["C"],["B"],["A"],["A","C"],["B"],["A","C"],["A","B","C"],["A","B"],["B"]
+        ]
+
+        var blue = [
+            ["B"],["A","C"],["B"],["A"],["B"],["B","C"],["C"],["A","C"],["A"]
+        ]
+
+        var black = [
+            ["A","B","C"],["A","C"],["B"],["A","C"],["B"],["B","C"],["A","B"],["C"],["C"]
+        ]
+
+        init();
+
+    </script>
+</body>
+
+</html>
