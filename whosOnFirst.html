@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Keep Talking - Who's on first</title>
+    <title>Who's on first - Keep Talking</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,6 +26,8 @@
 </head>
 
 <body>
+    <h3>Who's on first</h3>
+    <button type="button" onclick="reset();">Reset</button><br>
     Step 1: <input type="text" id="txtDisplay"><br>
     Step 2: <input type="text" id="txtButton"><br>
     <span id="out"></span>
@@ -76,6 +78,12 @@
 
         function update2() {
             return step2[txtBtn.value.trim().toLowerCase()];
+        }
+
+        function reset() {
+            txtDisp.value = "";
+            txtBtn.value = "";
+            update();
         }
 
         var step1 = {
