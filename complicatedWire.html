@@ -56,10 +56,6 @@
                     '<button type="button" i="' + i + '" id="red' + i + '" style="color:red;">Red</button>' +
                     '<button type="button" i="' + i + '" id="blue' + i + '" style="color:blue;">Blue</button>' +
                     '  <span id="out' + i + '"></span><br><br>';
-                checked["star" + i] = {checked: false};
-                checked["led" + i] = {checked: false};
-                checked["red" + i] = {checked: false};
-                checked["blue" + i] = {checked: false};
                 input.innerHTML += tags;
             }
 
@@ -70,6 +66,14 @@
                 gui["led" + i].addEventListener("click", btnClick);
                 gui["red" + i].addEventListener("click", btnClick);
                 gui["blue" + i].addEventListener("click", btnClick);
+                checked["star" + i] = {checked: false};
+                checked["led" + i] = {checked: false};
+                checked["red" + i] = {checked: false};
+                checked["blue" + i] = {checked: false};
+                gui["star" + i].style.backgroundColor = "initial";
+                gui["led" + i].style.backgroundColor = "initial";
+                gui["red" + i].style.backgroundColor = "initial";
+                gui["blue" + i].style.backgroundColor = "initial";
             }
             gui.numSerialLast.addEventListener("keyup", changeAll);
             gui.numParallel.addEventListener("keyup", changeAll);
@@ -195,17 +199,17 @@
             if (needSerial) {
                 gui.serialNum.style.backgroundColor = "red";
             } else {
-                gui.serialNum.style.backgroundColor = "";
+                gui.serialNum.style.backgroundColor = "initial";
             }
             if (needParallel) {
                 gui.parallel.style.backgroundColor = "red";
             } else {
-                gui.parallel.style.backgroundColor = "";
+                gui.parallel.style.backgroundColor = "initial";
             }
             if (needBat) {
                 gui.batteries.style.backgroundColor = "red";
             } else {
-                gui.batteries.style.backgroundColor = "";
+                gui.batteries.style.backgroundColor = "initial";
             }
         }
 
