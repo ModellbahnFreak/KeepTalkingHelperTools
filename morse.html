@@ -14,6 +14,8 @@
     <span id="out"></span>
 
     <script>
+        var ALL_CHARS_MUST_BE_IN_SEQUENCE = false; // weather or not to match the order of chars
+
         var txtCode = document.getElementById("txtCode");
         var out = document.getElementById("out")
         txtCode.addEventListener("keyup", codeUpdate);
@@ -50,9 +52,17 @@
                 matchWord = matchWord.substr(0, matchWord.length - 1)
             }
             for (w in freq) {
+                var lettersInWord = true;
+                var charSeqInWord = true;
                 var wordPos = -2;
-                for (var i = 0; i < matchWord.length && wordPos != -1; i++) {
-                    var nextPos = w.indexOf(matchWord.charAt(i));
+                for (var i = 0; i < matchWord.length; i++) {
+                    var nextPos = w.indexOf(matchWord.charAt(i), nextPos+1);
+                    if (nextPos < 0) {
+                        nextPos = w.indexOf(matchWord.charAt(i));
+                    }
+                    if (nextPos < 0) {
+                        lettersInWord = false;
+                    }
                     if (wordPos == -2) {
                         wordPos = nextPos;
                     } else {
@@ -60,11 +70,18 @@
                             wordPos = nextPos;
                         } else {
                             wordPos = -1;
+                            charSeqInWord = false;
                         }
                     }
                 }
-                if (wordPos >= 0) {
-                    out.innerText += "\t" + w + ": " + freq[w] + "\n";
+                if (ALL_CHARS_MUST_BE_IN_SEQUENCE) {
+                    if (charSeqInWord) {
+                        out.innerText += "\t" + w + ": " + freq[w] + "\n";
+                    }
+                } else {
+                    if (lettersInWord) {
+                        out.innerText += "\t" + w + ": " + freq[w] + "\n";
+                    }
                 }
             }
         }
