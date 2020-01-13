@@ -5,34 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Keep Talking - Simple Wire</title>
+    <title>Butter - Keep Talking</title>
+    <style>
+        .btnActive {
+            box-shadow: 0px 0px 10px orange;
+        }
+
+        label {
+            border: 1px solid black;
+            border-radius: 5px;
+            padding: 5px;
+            display: block;
+        }
+
+        .btnBlue {
+            background-color: blue;
+            color: white;
+        }
+
+        .btnRed {
+            background-color: red;
+            color: white;
+        }
+
+        .btnWhite {
+            background-color: white;
+            color: black;
+        }
+
+        .btnYellow {
+            background-color: yellow;
+            color: black;
+        }
+
+        .btnOther {
+            background-color: darkgrey;
+            color: black;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
-    <b>Number of Batteries </b><input type="text" id="txt1"><br>
-    <fieldset>
-        <input type="radio" id="blue" name="Colour" value="blue">
-        <label for="blue"> Blue</label> 
-        <input type="radio" id="red" name="Colour" value="red">
-        <label for="red"> Red</label>
-        <input type="radio" id="white" name="Colour" value="white">
-        <label for="white"> White</label> 
-        <input type="radio" id="yellow" name="Colour" value="yellow">
-        <label for="yellow"> Yellow</label>
-        <input type="radio" id="other" name="Colour" value="other" checked>
-        <label for="other"> Other</label>
-    </fieldset>
-    <fieldset>
-        <input type="radio" id="hold" name="label" value="hold">
-        <label for="hold"> HOLD</label> 
-        <input type="radio" id="abort" name="label" value="abort">
-        <label for="abort"> ABORT</label>
-        <input type="radio" id="detonate" name="label" value="detonate">
-        <label for="detonate"> DETONATE</label>
-        <input type="radio" id="other2" name="label" value="other2" checked>
-        <label for="other2"> Other</label> 
-    </fieldset>
-
+    <h3>Button</h3>
+    <b>Number of Batteries </b><input type="text" id="txt1"><br><br>
+    <table>
+        <tbody>
+            <tr>
+                <td><input type="radio" id="blue" name="Colour" value="blue">
+                    <label for="blue" class="btnBlue"> Blue</label> </td>
+                <td><input type="radio" id="red" name="Colour" value="red">
+                    <label for="red" class="btnRed"> Red</label></td>
+                <td><input type="radio" id="white" name="Colour" value="white">
+                    <label for="white" class="btnWhite"> White</label> </td>
+                <td><input type="radio" id="yellow" name="Colour" value="yellow">
+                    <label for="yellow" class="btnYellow"> Yellow</label></td>
+                <td><input type="radio" id="other" name="Colour" value="other" checked>
+                    <label for="other" class="btnOther"> Other</label></td>
+            </tr>
+            <tr>
+                <td><input type="radio" id="hold" name="label" value="hold">
+                    <label for="hold"> HOLD</label></td>
+                <td><input type="radio" id="abort" name="label" value="abort">
+                    <label for="abort"> ABORT</label></td>
+                <td><input type="radio" id="detonate" name="label" value="detonate">
+                    <label for="detonate"> DETONATE</label></td>
+                <td><input type="radio" id="other2" name="label" value="other2" checked>
+                    <label for="other2"> Other</label></td>
+            </tr>
+        </tbody>
+    </table>
+    <br>
     <span id="out"></span><br><br>
 
     <b>Releasing a held button</b><br>
@@ -41,53 +87,56 @@
     else: 1<br>
 
     <script>
+        var gui = document.getElementsByTagName("input");
+        var label = document.getElementsByTagName("label");
         var txt1 = document.getElementById("txt1");
         var out = document.getElementById("out");
         txt1.addEventListener("keyup", change);
-        white.addEventListener("click", change);
-        blue.addEventListener("click", change);
-        red.addEventListener("click", change);
-        yellow.addEventListener("click", change);
-        other.addEventListener("click", change);
-        hold.addEventListener("click", change);
-        abort.addEventListener("click", change);
-        detonate.addEventListener("click", change);
-        other.addEventListener("click", change);
-        other2.addEventListener("click", change);
+        for (var i = 0; i < gui.length; i++) {
+            gui[i].addEventListener("change", change)
+        }
 
         function change() {
-            done = false;
-            txt = txt1.value;
-            pos = "";
-            if (blue.checked && abort.checked) {
+            for (var i = 0; i < label.length; i++) {
+                if (gui[label[i].getAttribute("for")].checked) {
+                    label[i].classList.add("btnActive");
+                } else {
+                    label[i].classList.remove("btnActive");
+                }
+            }
+
+            var done = false;
+            var txt = txt1.value;
+            var pos = "";
+            if (gui.blue.checked && gui.abort.checked) {
                 out.innerText = "Hold long";
                 done = true;
             }
-            else if (detonate.checked) {
+            else if (gui.detonate.checked) {
                 if (!isInt(txt)) {
                     pos = "If there is more than 1 battery 'hold short' else ";
                 }
                 else if (Number.parseInt(txt) > 1) {
                     out.innerText = "Hold short";
-                    done = true;                   
+                    done = true;
                 }
             }
             if (!done) {
-                if (white.checked) {
+                if (gui.white.checked) {
                     pos += "if a label says 'CAR' 'hold long' else ";
                 }
                 if (!isInt(txt)) {
                     pos += "if a label says 'FRK' && there is more than 2 batteries 'hold short' else ";
                 }
                 else if (Number.parseInt(txt) > 2) {
-                    pos += "if a label says 'FRK' 'hold short' else "; 
+                    pos += "if a label says 'FRK' 'hold short' else ";
                 }
-                if (yellow.checked) {
+                if (gui.yellow.checked) {
                     out.innerText = pos + "hold long";
                     done = true;
                 }
                 if (!done) {
-                    if (red.checked && hold.checked) {
+                    if (gui.red.checked && gui.hold.checked) {
                         out.innerText = pos + "hold short";
                     }
                     else {
@@ -98,8 +147,10 @@
         }
 
         function isInt(s) {
-            return (Number.parseInt(s)>0||Number.parseInt(s)<=0);
+            return (Number.parseInt(s) > 0 || Number.parseInt(s) <= 0);
         }
+
+        change();
     </script>
 </body>
 
