@@ -5,10 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Keep Talking - Complicated Wires</title>
+    <title>Complicated Wires - Keep Talking</title>
+    <style>
+        button {
+            height: 25px;
+        }
+    </style>
 </head>
 
 <body>
+    <h3>Complicated wires</h3>
+
+    <table><tbody>
+        <tr id="serialNum"><td>Last digit serial num:</td><td><input type="number" id="numSerialLast"></td></tr>
+        <tr id="parallel"><td>Has Parallel:</td><td><input type="number" id="numParallel"></td></tr>
+        <tr id="batteries"><td>Num Batteries:</td><td><input type="number" id="numBatteries"></td></tr>
+    </tbody></table>
+    <br>
     <span id="input">
 
 
@@ -20,84 +33,119 @@
     <script>
         var input = document.getElementById("input");
         var gui = null;
+        var numComplexWires = 6;
         var layers = 6;
         var btnReset = document.getElementById("reset");
         btnReset.addEventListener("click", reset);
         var newLayers = document.getElementById("newLayers");
         newLayers.addEventListener("click", addNewLayers);
-        init();
+        var needSerial = false, needParallel = false, needBat = false;
+        var checked = {};
 
         function init() {
             input.innerHTML = "";
             gui = null;
             for (var i = 0; i < layers; i++) {
-                var tags = 'Wire ' + (i + 1) + ': <input i="' + i + '" type="checkbox" id="star' + i + '"><label for="star' + i + '">Star</label>' +
+                /*var tags = 'Wire ' + (i + 1) + ': <input i="' + i + '" type="checkbox" id="star' + i + '"><label for="star' + i + '">Star</label>' +
                     '<input type="checkbox" i="' + i + '" id="led' + i + '"><label for="led' + i + '">LED</label>' +
                     '<input type="checkbox" i="' + i + '" id="red' + i + '"><label for="red' + i + '" style="color:red;">Red</label>' +
                     '<input type="checkbox" i="' + i + '" id="blue' + i + '"><label for="blue' + i + '" style="color:blue;">Blue</label>' +
+                    '  <span id="out' + i + '"></span><br><br>';*/
+                var tags = 'Wire ' + (i + 1) + ': <button type="button" i="' + i + '" id="star' + i + '">Star</button>' +
+                    '<button type="button" i="' + i + '" id="led' + i + '">LED</button>' +
+                    '<button type="button" i="' + i + '" id="red' + i + '" style="color:red;">Red</button>' +
+                    '<button type="button" i="' + i + '" id="blue' + i + '" style="color:blue;">Blue</button>' +
                     '  <span id="out' + i + '"></span><br><br>';
-
+                checked["star" + i] = {checked: false};
+                checked["led" + i] = {checked: false};
+                checked["red" + i] = {checked: false};
+                checked["blue" + i] = {checked: false};
                 input.innerHTML += tags;
             }
 
             gui = document.getElementsByTagName("*");
 
             for (var i = 0; i < layers; i++) {
-                gui["star" + i].addEventListener("click", change);
-                gui["led" + i].addEventListener("click", change);
-                gui["red" + i].addEventListener("click", change);
-                gui["blue" + i].addEventListener("click", change);
-                change({ target: gui["star" + i] });
+                gui["star" + i].addEventListener("click", btnClick);
+                gui["led" + i].addEventListener("click", btnClick);
+                gui["red" + i].addEventListener("click", btnClick);
+                gui["blue" + i].addEventListener("click", btnClick);
             }
-
+            gui.numSerialLast.addEventListener("keyup", changeAll);
+            gui.numParallel.addEventListener("keyup", changeAll);
+            gui.numBatteries.addEventListener("keyup", changeAll);
+            changeAll();
         }
-                    
-        function change(e) {
-            var i = e.target.getAttribute("i");
-            setInstruction(i);
+
+        function btnClick(e) {
+            if (e.target.getAttribute("sel") == "1") {
+                e.target.style.backgroundColor = "initial";
+                e.target.setAttribute("sel", "0");
+                checked[e.target.id] = {checked: false};
+            } else {
+                e.target.style.backgroundColor = "yellow";
+                e.target.setAttribute("sel", "1");
+                checked[e.target.id] = {checked: true};
+            }
+            changeAll();
+        }
+
+        function changeAll() {
+            needSerial = false;
+            needParallel = false;
+            needBat = false;
+            for (var i = 0; i < layers; i++) {
+                setInstruction(i);
+            }
         }
 
         function setInstruction(i){
-            var star = gui["star" + i];
-            var led = gui["led" + i];
-            var red = gui["red" + i];
-            var blue = gui["blue" + i];
+            var star = checked["star" + i];
+            var led = checked["led" + i];
+            var red = checked["red" + i];
+            var blue = checked["blue" + i];
             var out = gui["out" + i];
             if (blue.checked) {
                 if (red.checked) {
                     if (star.checked) {
                         if (led.checked) {
                             //blue,red,star,led
-                            out.innerText = "Don't cut";
+                            out.innerHTML = "Don't cut";
                         } else {
                             //blue,red,star,!led
-                            out.innerText = hasParallel();
+                            needParallel = true;
+                            out.innerHTML = hasParallel();
                         }
                     } else {
                         if (led.checked) {
                             //blue,red,!star,led
-                            out.innerText = serialEven();
+                            needSerial = true;
+                            out.innerHTML = serialEven();
                         } else {
                             //blue,red,!star,!led
-                            out.innerText = serialEven();
+                            needSerial = true;
+                            out.innerHTML = serialEven();
                         }
                     }
                 } else {
                     if (star.checked) {
                         if (led.checked) {
                             //blue,!red,star,led
-                            out.innerText = hasParallel();
+                            needParallel = true;
+                            out.innerHTML = hasParallel();
                         } else {
                             //blue,!red,star,!led
-                            out.innerText = "Don't cut";
+                            out.innerHTML = "Don't cut";
                         }
                     } else {
                         if (led.checked) {
                             //blue,!red,!star,led
-                            out.innerText = hasParallel();
+                            needParallel = true;
+                            out.innerHTML = hasParallel();
                         } else {
                             //blue,!red,!star,!led
-                            out.innerText = serialEven();
+                            needSerial = true;
+                            out.innerHTML = serialEven();
                         }
                     }
                 }
@@ -106,52 +154,95 @@
                     if (star.checked) {
                         if (led.checked) {
                             //!blue,red,star,led
-                            out.innerText = hasBatteries();
+                            needBat = true;
+                            out.innerHTML = hasBatteries();
                         } else {
                             //!blue,red,star,!led
-                            out.innerText = "Cut";
+                            out.innerHTML = "Cut";
                         }
                     } else {
                         if (led.checked) {
                             //!blue,red,!star,led
-                            out.innerText = hasBatteries();
+                            needBat = true;
+                            out.innerHTML = hasBatteries();
                         } else {
                             //!blue,red,!star,!led
-                            out.innerText = serialEven();
+                            needSerial = true;
+                            out.innerHTML = serialEven();
                         }
                     }
                 } else {
                     if (star.checked) {
                         if (led.checked) {
                             //!blue,!red,star,led
-                            out.innerText = hasBatteries();
+                            needBat = true;
+                            out.innerHTML = hasBatteries();
                         } else {
                             //!blue,!red,star,!led
-                            out.innerText = "Cut";
+                            out.innerHTML = "Cut";
                         }
                     } else {
                         if (led.checked) {
                             //!blue,!red,!star,led
-                            out.innerText = "Don't cut";
+                            out.innerHTML = "Don't cut";
                         } else {
                             //!blue,!red,!star,!led
-                            out.innerText = "Cut";
+                            out.innerHTML = "Cut";
                         }
                     }
                 }
             }
+            if (needSerial) {
+                gui.serialNum.style.backgroundColor = "red";
+            } else {
+                gui.serialNum.style.backgroundColor = "";
+            }
+            if (needParallel) {
+                gui.parallel.style.backgroundColor = "red";
+            } else {
+                gui.parallel.style.backgroundColor = "";
+            }
+            if (needBat) {
+                gui.batteries.style.backgroundColor = "red";
+            } else {
+                gui.batteries.style.backgroundColor = "";
+            }
         }
 
         function hasParallel() {
-            return "Cut if has parallel";
+            var isParallel = parseInt(gui.numParallel.value);
+            if (gui.numParallel.value.length == 0 || !isFinite(isParallel)) {
+                return "Cut if has parallel port";
+            }
+            if (isParallel == 1) {
+                return "&#x2702; Cut";
+            } else {
+                return "Don't cut";
+            }
         }
 
         function serialEven() {
-            return "Cut if last digit is even";
+            var lastDigit = parseInt(gui.numSerialLast.value);
+            if (gui.numSerialLast.value.length == 0 || !isFinite(lastDigit)) {
+                return "Cut if last digit of serial number is even";
+            }
+            if (lastDigit % 2 == 0) {
+                return "&#x2702; Cut";
+            } else {
+                return "Don't cut";
+            }
         }
 
         function hasBatteries() {
-            return "Cut if two or more batteries";
+            var batteries = parseInt(gui.numBatteries.value);
+            if (gui.numBatteries.value.length == 0 || !isFinite(batteries)) {
+                return "Cut if 2 or more batteries";
+            }
+            if (batteries >= 2) {
+                return "&#x2702; Cut";
+            } else {
+                return "Don't cut";
+            }
         }
 
         function addNewLayers() {
@@ -186,6 +277,8 @@
             layers=6;
             init();
         }
+
+        init();
     </script>
 </body>
 
