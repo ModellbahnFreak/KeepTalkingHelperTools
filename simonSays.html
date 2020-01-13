@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Keep Talking - Simon Says</title>
+</head>
+
+<body>
+    Please enter if the SERIAL NUMBER contains a vovel <br>
+    <fieldset>
+        <input type="radio" id="vovel" name="radio" value="vovel">
+        <label for="vovel"> Vovel</label> 
+        <input type="radio" id="noVovel" name="radio" value="noVovel">
+        <label for="noVovel"> No vovel</label>
+        <input type="radio" id="notGiven" name="radio" value="notGiven" checked>
+        <label for="notGiven"> Unkown</label>
+    </fieldset>
+    <input type="text" id="txt1"><br>
+    
+
+    <span id="out"></span><br>
+
+    <button id="strike"><b>STRIKE</b></button> <span id="strikes"></span><br>
+    <button id="reset"> RESET</button>  
+
+    <script>
+        var nStrikes = 0;
+        var txt1 = document.getElementById("txt1");
+        var out = document.getElementById("out");
+        var strikes = document.getElementById("strikes");
+        var vovel = document.getElementById("vovel");
+        var noVovel = document.getElementById("noVovel");
+        var notGiven = document.getElementById("notGiven");
+        var strike = document.getElementById("strike");
+        var btnReset = document.getElementById("reset");
+        txt1.addEventListener("keyup", change);
+        vovel.addEventListener("click", change);
+        noVovel.addEventListener("click", change);
+        notGiven.addEventListener("click", change);
+        strike.addEventListener("click", newStrike);
+        btnReset.addEventListener("click", reset);
+
+        function change() {
+            text = txt1.value;
+            if (notGiven.checked) {
+                out.innerText = "Please enter: Does the serial number contain a vovel?"
+            } else if (!usefullString(text)) {
+                out.innerText = "Your string contains unusefull chars. Please check for type-errors."
+            } else {
+                out.innerText = getSequence(text);
+            }
+            strikes.innerText = nStrikes;
+        }
+
+        function reset() {
+            notGiven.checked=true;
+            txt1.value="";
+            nStrikes = 0;
+            change();
+        }
+
+        function newStrike() {
+            nStrikes++;
+            if (nStrikes>2) {
+                nStrikes--;
+            }
+            change();
+        }
+
+        function getSequence(s) {
+            var arr = getArr();
+            var r = "";
+            for (i=0; i<s.length; i++) {
+                r+=arr[nStrikes][s[i]];
+            }
+            return r;
+        }
+
+        function usefullString(s) {
+            for (i=0; i<s.length; i++) {
+                if (!(s[i]=="b"||s[i]=="g"||s[i]=="r"||s[i]=="y")) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function getArr() {
+            if (vovel.checked) {
+                return vovelList;
+            } else {
+                return noVovelList;
+            }
+        }
+
+        var vovelList = {
+            0:{
+            "r":"b",
+            "b":"r",
+            "g":"y",
+            "y":"g"
+            },
+            1:{
+            "r":"y",
+            "b":"g",
+            "g":"b",
+            "y":"r"
+            },
+            2:{
+            "r":"g",
+            "b":"r",
+            "g":"y",
+            "y":"b"
+            }
+        }
+
+        var noVovelList = {
+            0:{
+            "r":"b",
+            "b":"y",
+            "g":"g",
+            "y":"r"
+            },
+            1:{
+            "r":"r",
+            "b":"b",
+            "g":"y",
+            "y":"g"
+            },
+            2:{
+            "r":"y",
+            "b":"g",
+            "g":"b",
+            "y":"r"
+            },
+        }
+    </script>
+</body>
+
+</html>
